@@ -25,7 +25,7 @@ sed -i -e "s/preheat_kernel_page_cache: \(.*\)/# preheat_kernel_page_cache: \1/g
 sed -i -e "s/broadcast_address: \(.*\)/broadcast_rpc_address: \1/g" $NEW_YAML
 
 # update java to version 8
-echo "Installing Java 8"
+echo "Installing Java 8..."
 add-apt-repository ppa:webupd8team/java -y
 aptitude update -y
 echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
@@ -74,6 +74,9 @@ chown -R cassandra:cassandra /mnt/cassandra
 echo "Starting DSE service..."
 service dse start
 
+echo "Restarting datastax-agent..."
+service datastax-agent stop
+service datastax-agent start
 
 # remaining manual steps
 # 1. check node is back online and seen by other nodes: nodetool status
