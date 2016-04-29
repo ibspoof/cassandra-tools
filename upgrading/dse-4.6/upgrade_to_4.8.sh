@@ -5,6 +5,7 @@
 NEW_YAML=~/cassandra.yaml_48
 DEFAULT_YAML_LOCATION=/etc/dse/cassandra/cassandra.yaml
 BACKUP_DIR=/etc/dse/cassandra/_backup_46
+SLEEP_TIME=5
 
 # backup current configuration
 cp $DEFAULT_YAML_LOCATION $NEW_YAML
@@ -37,7 +38,9 @@ aptitude remove oracle-java7-installer oracle-java7-set-default -y
 
 # shutdown dse service cleanly
 nodetool flush
+sleep $SLEEP_TIME
 nodetool drain
+sleep $SLEEP_TIME
 service dse stop
 
 # upgrade dse using .deb and aptitude
@@ -48,6 +51,9 @@ cp $NEW_YAML $DEFAULT_YAML_LOCATION
 
 #force ownership of directory
 chown -R cassandra:cassandra /mnt/cassandra
+
+# startup dse
+service dse start
 
 
 # remaining manual steps
